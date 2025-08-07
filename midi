@@ -28,3 +28,158 @@ void loop() {
   
   delay(500);  // Wait for 500ms before the next reading
 }
+
+
+
+#####
+
+
+#include <MIDI.h>
+MIDI_CREATE_DEFAULT_INSTANCE();
+
+//Photoresistor connection pin
+int LDR1 = 2;
+int LDR2 = 3;
+int LDR3 = 4;
+int LDR4 = 5;
+int LDR5 = 6;
+
+//Tone selection
+int NOTA1 = 72;
+int NOTA2 = 74;
+int NOTA3 = 76;
+int NOTA4 = 79;
+int NOTA5 = 81;
+
+void setup() {
+  Serial.begin(9600);
+  
+  MIDI.begin(MIDI_CHANNEL_OFF);
+    
+  pinMode(LDR1, INPUT);
+  pinMode(LDR2, INPUT);
+  pinMode(LDR3, INPUT);
+  pinMode(LDR4, INPUT);
+  pinMode(LDR5, INPUT);
+}
+
+void loop() {
+  int SLDR1 = digitalRead(LDR1);
+  int SLDR2 = digitalRead(LDR2);
+  int SLDR3 = digitalRead(LDR3);
+  int SLDR4 = digitalRead(LDR4);
+  int SLDR5 = digitalRead(LDR5);
+
+
+   if (SLDR1 <= 400){//if the photoresistor detects less light it plays a note
+    MIDI.sendNoteOn(NOTA1,120,1);
+   }
+   else{//if the photoresistor detects more light it stops the note
+    MIDI.sendNoteOff(NOTA1,0,1);
+   }
+
+   if (SLDR2 <= 400){
+    MIDI.sendNoteOn(NOTA2,120,1);
+   }
+   else{
+    MIDI.sendNoteOff(NOTA2,0,1);
+   }
+      if (SLDR3 <= 400){
+    MIDI.sendNoteOn(NOTA3,120,1);
+   }
+   else{
+    MIDI.sendNoteOff(NOTA3,0,1);
+   }
+
+   if (SLDR4 <= 400){
+    MIDI.sendNoteOn(NOTA4,120,1);
+   }
+   else{
+    MIDI.sendNoteOff(NOTA4,0,1);
+   }
+      if (SLDR5 <= 400){
+    MIDI.sendNoteOn(NOTA5,120,1);
+   }
+   else{
+    MIDI.sendNoteOff(NOTA5,0,1);
+   }
+}
+
+
+######
+
+
+#include <MIDI.h>
+
+int ldrPin 1= 2;    // Analog pin connected to the LDR
+int ldrPin2= 3;
+int ldrPin3 = 4;
+int ldrPin4 = 5;
+int ldrPin5 = 6;
+int ldrPin6 = 7;
+int ldrPin7 = 8;
+int threshold = 700; // Set a threshold value to differentiate between low and high light
+int midiNote =60 ;// MIDI note value (60 = Middle C)
+
+MIDI_CREATE_DEFAULT_INSTANCE();  // Create a default MIDI object
+
+void setup() { 
+  MIDI.begin(1); 
+  Serial.begin(115200);  // Set MIDI baud rate
+                   // Initialize the MIDI library
+}
+
+void loop() {
+  
+  int ldrValue = digitalRead(ldrPin);  // Read the analog value from the LDR
+  if (ldrValue==LOW) {         // If the LDR detects low light (motion)
+    // Send MIDI Note On (velocity = 127)
+    MIDI.sendNoteOff(midiNote,127, 1); // Note, Velocity, Channel
+    Serial.println("light ind,midi signal venda");
+  } else {                            // If the LDR detects more light (no motion)
+    //Send MIDI Note Off
+    MIDI.sendNoteOn(midiNote,127, 1);  // Note, Velocity 0, Channel
+    Serial.println("light ila midi signal venm");
+
+  }
+  
+  delay(500);  // Wait for 500ms before the next reading
+}
+
+
+
+####
+
+
+#include <MIDI.h>
+
+int ldrPin = 2;    // Analog pin connected to the LDR
+int threshold = 700; // Set a threshold value to differentiate between low and high light
+int midiNote =60 ;// MIDI note value (60 = Middle C)
+
+MIDI_CREATE_DEFAULT_INSTANCE();  // Create a default MIDI object
+
+void setup() { 
+  MIDI.begin(1); 
+  Serial.begin(115200);  // Set MIDI baud rate
+                   // Initialize the MIDI library
+}
+
+void loop() {
+  
+  int ldrValue = digitalRead(ldrPin);  // Read the analog value from the LDR
+  if (ldrValue==LOW) {         // If the LDR detects low light (motion)
+    // Send MIDI Note On (velocity = 127)
+    buzzerOff(buzzer, OFF); // Note, Velocity, Channel
+    Serial.println("light ind,midi signal venda");
+  } else {                            // If the LDR detects more light (no motion)
+    //Send MIDI Note Off
+    buzzerOn(buzzer, ON);  // Note, Velocity 0, Channel
+    Serial.println("light ila midi signal venm");
+
+  }
+  
+  delay(100);  // Wait for 500ms before the next reading
+}
+
+
